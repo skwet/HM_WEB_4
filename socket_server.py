@@ -13,7 +13,7 @@ def run_server():
 
 def save_to_json(data_dict):
     time = data_dict['time']
-    with open('storage/data.json', 'r+') as f:
+    with open('front-init/storage/data.json', 'r+') as f:
         existed_data = json.load(f)
         existed_data[time] = {
             'username': data_dict['name'], 

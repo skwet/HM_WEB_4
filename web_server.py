@@ -11,14 +11,14 @@ class HttpHandler(BaseHTTPRequestHandler):
     def do_GET(self):
         pr_url = urllib.parse.urlparse(self.path)
         if pr_url.path == '/':
-            self.send_html_file('index.html')
+            self.send_html_file('front-init/index.html')
         elif pr_url.path == '/message':
-            self.send_html_file('message.html')
+            self.send_html_file('front-init/message.html')
         else:
-            if pathlib.Path().joinpath(pr_url.path[1:]).exists():
+            if pathlib.Path().joinpath('front-init' , pr_url.path[1:]).exists():
                 self.send_static()
             else:
-                self.send_html_file('error.html', 404)
+                self.send_html_file('front-init/error.html', 404)
     
     def do_POST(self):
         data = self.rfile.read(int(self.headers['Content-Length']))
@@ -54,11 +54,11 @@ class HttpHandler(BaseHTTPRequestHandler):
         else:
             self.send_header("Content-type", 'text/plain')
         self.end_headers()
-        with open(f'.{self.path}', 'rb') as file:
+        with open(f'./front-init{self.path}', 'rb') as file:
             self.wfile.write(file.read())
 
 def run(server_class=HTTPServer, handler_class=HttpHandler):
-    server_address = ('', 3000)
+    server_address = ('localhost', 3000)
     http = server_class(server_address, handler_class)
     try:
         http.serve_forever()
